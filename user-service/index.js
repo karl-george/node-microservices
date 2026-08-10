@@ -32,13 +32,17 @@ app.post("/users", async (req, res) => {
   try {
     const user = new User({ name, email });
     await user.save();
-    res.status(200).json(user);
+    res.status(201).json(user);
   } catch (error) {
     console.error("Error creating user:", error);
-    res.status(499).json({ error: "Error creating user" });
+    res.status(500).json({ error: "Error creating user" });
   }
 });
 
-app.listen(port, () => {
-  console.log(`User service listening at http://localhost:${port}`);
-});
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`User service listening at http://localhost:${port}`);
+  });
+}
+
+module.exports = app;
