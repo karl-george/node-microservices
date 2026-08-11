@@ -53,3 +53,25 @@ jobs:
       - name: Run tests
         working-directory: ./user-service
         run: npm test
+
+  test_task_service:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+          cache-dependency-path: ./task-service/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./task-service
+        run: npm ci
+
+      - name: Run tests
+        working-directory: ./task-service
+        run: npm test
