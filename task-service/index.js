@@ -23,6 +23,9 @@ const TaskSchema = new mongoose.Schema({
 const Task = mongoose.model('Task', TaskSchema);
 
 let channel, connection;
+const setChannel = (ch) => {
+  channel = ch;
+};
 
 const connectRabbitMQ = async (retries = 5, delay = 3000) => {
   while (retries) {
@@ -81,4 +84,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = app;
+module.exports = { app, setChannel };
