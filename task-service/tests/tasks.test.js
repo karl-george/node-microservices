@@ -2,11 +2,13 @@ const request = require('supertest');
 
 const mockFind = jest.fn();
 const mockSave = jest.fn();
+const mockSendToQueue = jest.fn();
 
 jest.mock('mongoose', () => {
   const mockTest = jest.fn(function (data) {
     return {
       ...data,
+      _id: 'mocked_id',
       save: mockSave,
     };
   });
@@ -20,7 +22,7 @@ jest.mock('mongoose', () => {
   };
 });
 
-const app = require('../index');
+const { app, setChannel } = require('../index');
 
 describe('GET /', () => {
   it('returns Hello World', async () => {
@@ -72,24 +74,26 @@ describe('GET /tasks', () => {
 describe('POST /tasks', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+
+    setChannel({
+      assertQueue: jest.fn(),
+      sendToQueue: mockSendToQueue,
+    });
   });
 
-  it('creates a task', async () => {
-    const task = {
-      title: 'Task 1',
-      description: 'Description 1',
-      userId: 'user1',
-    };
-
-    mockSave.mockResolvedValue(task);
-
-    const response = await request(app).post('/tasks').send(task);
+  it('creates a task and sends a RabbitMQ message', async () => {
+    const response = await request(app).post('/tasks').send({
+      title: 'Test task',
+      description: 'Test description',
+      userId: '123',
+    });
 
     expect(response.status).toBe(201);
-    expect(response.body.title).toBe('Task 1');
-    expect(response.body.description).toBe('Description 1');
-    expect(response.body.userId).toBe('user1');
-    expect(mockSave).toHaveBeenCalledTimes(1);
+
+    expect(mockSendToQueue).toHaveBeenCalledWith(
+      'task_created',
+      expect.any(Buffer)
+    );
   });
 
   it('returns 500 when creating a task fails', async () => {
