@@ -1,6 +1,6 @@
 const API_URL = 'http://localhost:3002';
 
-export async function getTasks() {
+async function getTasks() {
   const response = await fetch(`${API_URL}/tasks`);
 
   if (!response.ok) {
@@ -10,7 +10,7 @@ export async function getTasks() {
   return response.json();
 }
 
-export async function createTask(task) {
+async function createTask(task) {
   const response = await fetch(`${API_URL}/tasks`, {
     method: 'POST',
     headers: {
@@ -25,3 +25,5 @@ export async function createTask(task) {
 
   return response.json();
 }
+
+module.exports = { getTasks, createTask };
