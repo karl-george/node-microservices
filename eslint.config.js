@@ -3,11 +3,12 @@ const globals = require('globals');
 const prettier = require('eslint-config-prettier');
 
 module.exports = [
+  { ignores: ['**/node_modules/**', '**/dist/**'] },
   {
     files: ['**/*.js'],
     languageOptions: {
       ecmaVersion: 'latest',
-      sourceType: 'commonjs',
+      sourceType: 'module',
       globals: {
         ...globals.node,
       },
