@@ -1,7 +1,5 @@
-const API_URL = 'http://localhost:3002';
-
 export async function getTasks() {
-  const response = await fetch(`${API_URL}/tasks`);
+  const response = await fetch('/tasks');
 
   if (!response.ok) {
     throw new Error('Failed to fetch tasks');
@@ -11,7 +9,7 @@ export async function getTasks() {
 }
 
 export async function createTask(task) {
-  const response = await fetch(`${API_URL}/tasks`, {
+  const response = await fetch('/tasks', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
