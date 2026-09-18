@@ -11,7 +11,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 mongoose
-  .connect('mongodb://mongo:27017/tasks')
+  .connect('mongodb://mongo-service:27017/tasks')
   .then(() => console.log('Connected to MongoDB'))
   .catch((error) => console.error('Could not connect to MongoDB', error));
 
@@ -53,6 +53,10 @@ app.get('/', (req, res) => {
 app.get('/tasks', async (req, res) => {
   const tasks = await Task.find();
   res.json(tasks);
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
 });
 
 // Create a new task
