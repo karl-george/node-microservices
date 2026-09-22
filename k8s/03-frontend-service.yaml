@@ -19,7 +19,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: frontend-service
-          image: ghcr.io/karl-george/frontend-service:1.0.0
+          image: ghcr.io/karl-george/frontend-service:1.0.1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5173
